@@ -268,9 +268,9 @@ const APIDocumentation: React.FC = () => {
           <div className="bg-white/10 backdrop-blur-md border border-white/20 rounded-2xl p-6 max-w-4xl mx-auto">
             <h2 className="text-white font-semibold mb-4">Base URL</h2>
             <div className="bg-black/30 rounded-lg p-4 font-mono text-green-300 flex items-center justify-between">
-              <span>http://localhost:8080</span>
+              <span>https://eamagineweather-production.up.railway.app</span>
               <button
-                onClick={() => copyToClipboard('http://localhost:8080', 'base-url')}
+                onClick={() => copyToClipboard('https://eamagineweather-production.up.railway.app', 'base-url')}
                 className="text-white/60 hover:text-white transition-colors"
                 title="Copy to clipboard"
               >
@@ -393,7 +393,7 @@ const APIDocumentation: React.FC = () => {
                       <div className="bg-black/40 rounded-lg p-4 relative">
                         <button
                           onClick={() => copyToClipboard(
-                            `curl -X ${endpoint.method} "http://localhost:8080${endpoint.path.replace(':provinceCode', '31').replace(':regencyCode', '31.01').replace(':regionCode', '31.01.01.1001')}"`,
+                            `curl -X ${endpoint.method} "https://eamagineweather-production.up.railway.app${endpoint.path.replace(':provinceCode', '31').replace(':regencyCode', '31.01').replace(':regionCode', '31.01.01.1001')}"`,
                             `curl-${endpoint.path}`
                           )}
                           className="absolute top-2 right-2 text-white/60 hover:text-white transition-colors text-sm"
@@ -402,7 +402,7 @@ const APIDocumentation: React.FC = () => {
                           {copiedEndpoint === `curl-${endpoint.path}` ? '✓ Copied' : '📋 Copy'}
                         </button>
                         <code className="text-yellow-300 text-sm">
-                          curl -X {endpoint.method} "http://localhost:8080{endpoint.path.replace(':provinceCode', '31').replace(':regencyCode', '31.01').replace(':regionCode', '31.01.01.1001')}"
+                          curl -X {endpoint.method} "https://eamagineweather-production.up.railway.app{endpoint.path.replace(':provinceCode', '31').replace(':regencyCode', '31.01').replace(':regionCode', '31.01.01.1001')}"
                         </code>
                       </div>
                     </div>
