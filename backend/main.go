@@ -61,7 +61,7 @@ func main() {
 
 	// CORS configuration - Allow all origins for development
 	corsConfig := cors.DefaultConfig()
-	corsConfig.AllowAllOrigins = true
+	//corsConfig.AllowAllOrigins = true
 	corsConfig.AllowHeaders = []string{"Origin", "Content-Length", "Content-Type", "Authorization", "X-Requested-With"}
 	corsConfig.AllowMethods = []string{"GET", "POST", "PUT", "DELETE", "OPTIONS"}
 	router.Use(cors.New(corsConfig))
