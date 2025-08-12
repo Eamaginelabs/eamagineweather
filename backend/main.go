@@ -59,9 +59,17 @@ func main() {
 	router.Use(gin.Logger())
 	router.Use(gin.Recovery())
 
-	// CORS configuration - Allow all origins for development
+	// CORS configuration
 	corsConfig := cors.DefaultConfig()
-	//corsConfig.AllowAllOrigins = true
+	
+	// Check if we have allowed origins configured
+	if len(cfg.AllowedOrigins) > 0 && cfg.AllowedOrigins[0] != "" {
+		corsConfig.AllowOrigins = cfg.AllowedOrigins
+	} else {
+		// Fallback to allow all origins if no specific origins configured
+		corsConfig.AllowAllOrigins = true
+	}
+	
 	corsConfig.AllowHeaders = []string{"Origin", "Content-Length", "Content-Type", "Authorization", "X-Requested-With"}
 	corsConfig.AllowMethods = []string{"GET", "POST", "PUT", "DELETE", "OPTIONS"}
 	router.Use(cors.New(corsConfig))
