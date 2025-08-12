@@ -1,0 +1,131 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "go run github.com/steebchen/prisma-client-go"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Region {
+  id            String @id @default(cuid())
+  code          String @unique // Kode wilayah (11, 11.01, 11.01.01, 11.01.01.2001)
+  name          String
+  level         Int    // 1=Province, 2=Regency/City, 3=District, 4=Village
+  
+  // Hierarchical data
+  provinceCode  String?
+  provinceName  String?
+  regencyCode   String?
+  regencyName   String?
+  districtCode  String?
+  districtName  String?
+  villageCode   String?
+  villageName   String?
+  
+  // Geographic data (populated from BMKG API responses)
+  latitude      Float?
+  longitude     Float?
+  timezone      String?
+  
+  // Status
+  hasWeatherData Boolean @default(false) // Flag if this region has weather data available
+  isActive      Boolean @default(true)   // For soft delete/disable
+  
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+  
+  // Relations
+  weatherData   WeatherData[]
+  favorites     UserFavorite[]
+
+  // Indexes for fast queries
+  @@index([level])
+  @@index([provinceCode])
+  @@index([regencyCode])
+  @@index([name])
+  @@index([hasWeatherData])
+  @@map("regions")
+}
+
+model WeatherData {
+  id                String   @id @default(cuid())
+  regionId          String
+  utcDatetime       DateTime
+  localDatetime     DateTime
+  temperature       Float    // Suhu Udara dalam °C
+  humidity          Int      // Kelembapan Udara dalam %
+  weatherDesc       String   // Kondisi Cuaca dalam Indonesia
+  weatherDescEn     String   // Kondisi Cuaca dalam English
+  windSpeed         Float    // Kecepatan Angin dalam km/jam
+  windDirection     String   // Arah Angin dari
+  cloudCover        Int      // Tutupan Awan dalam %
+  visibility        String   // Jarak Pandang dalam km
+  analysisDate      DateTime // Waktu produksi data prakiraan cuaca
+  
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  
+  // Relations
+  region Region @relation(fields: [regionId], references: [id], onDelete: Cascade)
+  
+  @@unique([regionId, utcDatetime])
+  @@map("weather_data")
+}
+
+model User {
+  id        String   @id @default(cuid())
+  email     String   @unique
+  name      String?
+  avatar    String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  
+  // Relations
+  favorites UserFavorite[]
+  
+  @@map("users")
+}
+
+model UserFavorite {
+  id       String @id @default(cuid())
+  userId   String
+  regionId String
+  order    Int    @default(0)
+  
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  
+  // Relations
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  region Region @relation(fields: [regionId], references: [id], onDelete: Cascade)
+  
+  @@unique([userId, regionId])
+  @@map("user_favorites")
+}
+
+model WeatherAlert {
+  id          String      @id @default(cuid())
+  title       String
+  description String
+  severity    AlertSeverity
+  region      String?     // Optional region filter
+  startTime   DateTime
+  endTime     DateTime?
+  isActive    Boolean     @default(true)
+  
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  
+  @@map("weather_alerts")
+}
+
+enum AlertSeverity {
+  LOW
+  MEDIUM
+  HIGH
+  CRITICAL
+}
