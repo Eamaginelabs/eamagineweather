@@ -42,8 +42,12 @@ func Load() *Config {
 	}
 
 	// Parse allowed origins
-	allowedOriginsStr := getEnv("ALLOWED_ORIGINS", "http://localhost:5173,http://localhost:3000")
-	config.AllowedOrigins = strings.Split(allowedOriginsStr, ",")
+	allowedOriginsStr := getEnv("ALLOWED_ORIGINS", "")
+	if allowedOriginsStr != "" {
+		config.AllowedOrigins = strings.Split(allowedOriginsStr, ",")
+	} else {
+		config.AllowedOrigins = []string{} // Empty means allow all origins in main.go
+	}
 
 	return config
 }
