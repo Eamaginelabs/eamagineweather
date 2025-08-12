@@ -1,12 +1,16 @@
 [phases.setup]
-nixPkgs = ["go_1_22", "git"]
+nixPkgs = ["go_1_22"]
 
 [phases.build]
 cmds = [
-  "go mod download",
+  "go mod download -x",
   "go run github.com/steebchen/prisma-client-go generate",
-  "go build -o main ."
+  "CGO_ENABLED=0 go build -ldflags='-w -s' -o main ."
 ]
+
+[variables]
+CGO_ENABLED = "0"
+GOOS = "linux"
 
 [start]
 cmd = "./main"

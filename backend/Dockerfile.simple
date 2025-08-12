@@ -1,0 +1,22 @@
+# Simple single-stage build for Railway
+FROM golang:1.22-alpine
+
+# Install minimal dependencies
+RUN apk add --no-cache ca-certificates tzdata
+
+# Set working directory
+WORKDIR /app
+
+# Copy everything
+COPY . .
+
+# Download deps, generate Prisma client, and build in one layer
+RUN go mod download && \
+    go run github.com/steebchen/prisma-client-go generate && \
+    CGO_ENABLED=0 go build -ldflags="-w -s" -o main .
+
+# Expose port
+EXPOSE 8080
+
+# Run the binary
+CMD ["./main"]

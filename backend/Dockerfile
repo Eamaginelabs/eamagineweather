@@ -1,43 +1,40 @@
-# Use the official Go image
+# Use smaller base image and optimize for Railway
 FROM golang:1.22-alpine AS builder
-
-# Install build dependencies
-RUN apk add --no-cache git
 
 # Set working directory
 WORKDIR /app
 
-# Copy go mod files
+# Copy go mod files first (for better caching)
 COPY go.mod go.sum ./
 
-# Download dependencies
+# Download dependencies with timeout
 RUN go mod download
 
-# Copy source code
+# Copy only necessary files to reduce context
 COPY . .
 
-# Generate Prisma client
-RUN go run github.com/steebchen/prisma-client-go generate
+# Generate Prisma client and build in one step
+RUN go run github.com/steebchen/prisma-client-go generate && \
+    CGO_ENABLED=0 GOOS=linux go build -ldflags="-w -s" -o main .
 
-# Build the application
-RUN CGO_ENABLED=0 GOOS=linux go build -o main .
+# Use distroless for minimal production image
+FROM alpine:3.18
 
-# Production stage
-FROM alpine:latest
+# Install only essential packages
+RUN apk --no-cache add ca-certificates tzdata && \
+    addgroup -g 1001 -S golang && \
+    adduser -S -D -H -u 1001 -h /app -s /sbin/nologin -G golang -g golang golang
 
-# Install ca-certificates for HTTPS requests
-RUN apk --no-cache add ca-certificates
+WORKDIR /app
 
-WORKDIR /root/
+# Copy binary with correct permissions
+COPY --from=builder --chown=golang:golang /app/main /app/main
 
-# Copy the binary from builder stage
-COPY --from=builder /app/main .
-
-# Copy schema for runtime
-COPY --from=builder /app/schema.prisma .
+# Switch to non-root user
+USER golang
 
 # Expose port
 EXPOSE 8080
 
 # Command to run
-CMD ["./main"]
+CMD ["/app/main"]
