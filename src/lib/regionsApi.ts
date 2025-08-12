@@ -37,7 +37,7 @@ export interface RegionsSearchParams {
   limit?: number;
 }
 
-const BASE_URL = 'http://localhost:8080/api/v1';
+const BASE_URL = import.meta.env.VITE_API_BASE_URL || 'https://eamagineweather-production.up.railway.app/api/v1';
 
 class RegionsApiClient {
   // Get regions with filtering and pagination
