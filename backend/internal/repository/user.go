@@ -2,7 +2,7 @@ package repository
 
 import (
 	"context"
-	"eamagine-weather-backend/db"
+	"eamagineweather-backend/db"
 )
 
 type UserRepository struct {

@@ -1,4 +1,4 @@
-module eamagine-weather-backend
+module eamagineweather-backend
 
 go 1.22
 

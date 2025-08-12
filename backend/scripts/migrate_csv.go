@@ -10,7 +10,7 @@ import (
 	"os"
 	"strings"
 
-	"eamagine-weather-backend/db"
+	"eamagineweather-backend/db"
 
 	"github.com/joho/godotenv"
 )

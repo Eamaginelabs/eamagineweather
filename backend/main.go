@@ -9,12 +9,12 @@ import (
 	"syscall"
 	"time"
 
-	"eamagine-weather-backend/internal/config"
-	"eamagine-weather-backend/internal/database"
-	"eamagine-weather-backend/internal/handler"
-	"eamagine-weather-backend/internal/middleware"
-	"eamagine-weather-backend/internal/repository"
-	"eamagine-weather-backend/internal/service"
+	"eamagineweather-backend/internal/config"
+	"eamagineweather-backend/internal/database"
+	"eamagineweather-backend/internal/handler"
+	"eamagineweather-backend/internal/middleware"
+	"eamagineweather-backend/internal/repository"
+	"eamagineweather-backend/internal/service"
 
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"

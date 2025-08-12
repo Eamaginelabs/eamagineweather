@@ -2,7 +2,7 @@ package database
 
 import (
 	"context"
-	"eamagine-weather-backend/db"
+	"eamagineweather-backend/db"
 
 	"github.com/redis/go-redis/v9"
 )

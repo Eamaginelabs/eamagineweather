@@ -7,7 +7,7 @@ import (
 	"strings"
 	"time"
 
-	"eamagine-weather-backend/db"
+	"eamagineweather-backend/db"
 
 	"github.com/gin-gonic/gin"
 	"github.com/redis/go-redis/v9"

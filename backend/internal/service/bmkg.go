@@ -7,7 +7,7 @@ import (
 	"net/http"
 	"time"
 
-	"eamagine-weather-backend/internal/models"
+	"eamagineweather-backend/internal/models"
 
 	"github.com/redis/go-redis/v9"
 )

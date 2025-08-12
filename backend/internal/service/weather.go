@@ -5,7 +5,7 @@ import (
 	"log"
 	"time"
 
-	"eamagine-weather-backend/internal/repository"
+	"eamagineweather-backend/internal/repository"
 	"github.com/redis/go-redis/v9"
 )
 

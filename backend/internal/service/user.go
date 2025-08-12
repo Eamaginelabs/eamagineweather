@@ -2,7 +2,7 @@ package service
 
 import (
 	"context"
-	"eamagine-weather-backend/internal/repository"
+	"eamagineweather-backend/internal/repository"
 )
 
 type UserService struct {

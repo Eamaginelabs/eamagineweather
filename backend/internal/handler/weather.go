@@ -2,7 +2,7 @@ package handler
 
 import (
 	"net/http"
-	"eamagine-weather-backend/internal/service"
+	"eamagineweather-backend/internal/service"
 
 	"github.com/gin-gonic/gin"
 )
